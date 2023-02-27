@@ -52,9 +52,10 @@ IMG_20180902_172045.jpg	D:\VG\Private\Család\Bea\Beus motor	1,09 MB	2018. 09. 0
 
 
 def create_symlink(src_path, dst_path):
-    os.remove(src_path)
-    time.sleep(2)
-    os.symlink(src_path, dst_path)
+    os.remove(src_path)  # It will be symlink
+    os.symlink(dst_path, src_path)  # The meaning of dst and src is replaced in the symlink method
+    # They call the src_path (1. parameter) which is targeted by symlink
+    # and the symlink named at dst_path (2. parameter)
 
 
 def remove_file(path, dst_path):
@@ -74,14 +75,14 @@ def print_cmd(letter, cmd, elem, alternative, method, params):
 
 def get_resolves_input(elements):
     print('Please select:')
-    range_abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    range_abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o']
     command_list = []
     index_letter = 0
     for index, elem in enumerate(elements):
         cmd = 'delete'
         method = remove_file
         alternative = None
-        command_elem = print_cmd(range_abc[index_letter], cmd, elem, alternative, method, params=elem)
+        command_elem = print_cmd(range_abc[index_letter], cmd, elem, alternative, method, params=[elem, None])
         command_list.append(command_elem)
         index_letter += 1
         cmd = 'symlink'
@@ -91,7 +92,7 @@ def get_resolves_input(elements):
         command_list.append(command_elem)
         index_letter += 1
     cmd = 'skip'
-    command_elem = print_cmd(range_abc[index_letter], cmd, elem=None, alternative=None, method=do_nothing, params=None)
+    command_elem = print_cmd(range_abc[index_letter], cmd, elem=None, alternative=None, method=do_nothing, params=[])
     command_list.append(command_elem)
     #
     cmd_char = input()  # Blocked call
