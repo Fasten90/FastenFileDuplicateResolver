@@ -73,26 +73,31 @@ def print_cmd(letter, cmd, elem, alternative, method, params):
     return (letter, method, params)
 
 
+def get_letter(index):
+    letter = chr(ord('a') + index)
+    return letter
+    
+
 def get_resolves_input(elements):
+    print('-' * 10)
     print('Please select:')
-    range_abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o']
     command_list = []
     index_letter = 0
     for index, elem in enumerate(elements):
         cmd = 'delete'
         method = remove_file
         alternative = None
-        command_elem = print_cmd(range_abc[index_letter], cmd, elem, alternative, method, params=[elem, None])
+        command_elem = print_cmd(get_letter(index_letter), cmd, elem, alternative, method, params=[elem, None])
         command_list.append(command_elem)
         index_letter += 1
         cmd = 'symlink'
         method = create_symlink
         alternative = elements[1] if index == 0 else elements[0]
-        command_elem = print_cmd(range_abc[index_letter], cmd, elem, alternative, method, params=[elem, alternative])
+        command_elem = print_cmd(get_letter(index_letter), cmd, elem, alternative, method, params=[elem, alternative])
         command_list.append(command_elem)
         index_letter += 1
     cmd = 'skip'
-    command_elem = print_cmd(range_abc[index_letter], cmd, elem=None, alternative=None, method=do_nothing, params=[])
+    command_elem = print_cmd(get_letter(index_letter), cmd, elem=None, alternative=None, method=do_nothing, params=[])
     command_list.append(command_elem)
     #
     cmd_char = input()  # Blocked call
@@ -112,17 +117,19 @@ def check_list(duplicated_elements):
         # Duplicated list
         duplicate_count = len(item)
         new_item = []
+        print('-' * 60)
         for path in item:
             # One element in the duplicates
-            print(path)
+            
             if not os.path.exists(path):
-                print(f'File does not exist, maybe there is no TODO: {path}')
+                print(f'- File does not exist, maybe there is no TODO: {path}')
                 duplicate_count -= 1
             elif os.path.islink(path):
-                print(f'File is link, maybe there is no TODO: {path}')
+                print(f'- File is link, maybe there is no TODO: {path}')
                 duplicate_count -= 1
             else:
                 new_item.append(path)
+                print(f'- {path}')
                 # exists and not symlink
         if duplicate_count <= 1:
             print('There is no TODO, this issue is resolved')
